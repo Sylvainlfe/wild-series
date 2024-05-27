@@ -1,42 +1,46 @@
-// Some data to make the trick
+const tables = require("../../database/tables");
 
 const categories = [
-    {
-      id: 1,
-      name: "Science-Fiction",
-    },
-    {
-      id: 2,
-      name: "Comédie",
-    },
-  ];
-  
-  // Declare the actions
-  
-  /* Here you code */
-const browse = (req, res) => {
-    if (req.query.q != null) {
-        const filteredCategorys = categories.filter((category) =>
-        category.synopsis.includes(req.query.q));
+  {
+    id: 1,
+    name: "Science-Fiction",
+  },
+  {
+    id: 2,
+    name: "Comédie",
+  },
+];
 
-        res.json(filteredCategorys);
-    } else {
-        res.json(categories);
-    }
+// Declare the actions
+
+// const browse = (req, res) => {
+//     if (req.query.q != null) {
+//         const filteredCategorys = categories.filter((category) =>
+//         category.synopsis.includes(req.query.q));
+
+//         res.json(filteredCategorys);
+//     } else {
+//         res.json(categories);
+//     }
+// };
+const browse = async (req, res) => {
+  const categoriesFromDB = await tables.category.readAll();
+
+  res.json(categoriesFromDB);
 };
 
 const read = (req, res) => {
-    const parsedId = parseInt(req.params.id, 10);
+  const parsedId = parseInt(req.params.id, 10);
 
-    const category = categories.find((p) => p.id === parsedId);
+  const category = categories.find((p) => p.id === parsedId);
 
-    if (category != null) {
-        res.json(category);
-    } else {
-        res.sendStatus(404);
-    }
-}
+  if (category != null) {
+    res.json(category);
+  } else {
+    res.sendStatus(404);
+  }
+};
 
-  // Export them to import them somewhere else
-  
-  module.exports = { browse, read };
+// Export them to import them somewhere else
+
+module.exports = { browse, read };
